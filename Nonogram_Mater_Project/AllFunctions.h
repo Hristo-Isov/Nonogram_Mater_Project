@@ -52,3 +52,15 @@ void saveGame(UserProfile& user, int size) {
         cerr << "Unable to save the game.\n";
     }
 }
+int getDifficultyChoice() {
+    int choice;
+    cout << "Choose difficulty level:\n";
+    cout << "1. Super Easy\n";
+    cout << "2. Easy\n";
+    cout << "3. Medium\n";
+    cout << "4. Hard\n";
+    cout << "5. Extreme\n";
+    cout << "Enter the number corresponding to your choice: ";
+    cin >> choice;
+    return choice;
+}
