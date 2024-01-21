@@ -326,4 +326,110 @@ void printGrid(char grid[MAX_SIZE][MAX_SIZE], char picture[MAX_SIZE][MAX_SIZE], 
         cout << "\n";
     }
 }
+void playGame(UserProfile& user, NonogramLevel& level) {
+    int size = level.size;
+    char picture[MAX_SIZE][MAX_SIZE];
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (level.picture[i][j] == '\0') {
+                picture[i][j] = '_';
+            }
+            else {
+                picture[i][j] = level.picture[i][j];
+            }
+        }
+    }
+
+    /*for (int i = 0; i < size; ++i)
+        for (int j = 0; j < size; ++j)
+            user.currentGrid[i][j] = '_';*///ako iztriq tova mi raboti logikata za veche gotov potrebitel zashtoto po doly si izwikwam komanda printGrid ako ne e nov potrebitel trqbwa da se otpechatva tova i logikata raboti
+    while (user.currentWrongAnswers < level.maxWrongAnswers) {
+        if (isLevelComplete(user.currentGrid, picture, size)) {
+            cout << "Congratulations! You completed Level " << user.currentLevel << "!\n";
+            user.currentLevel++;
+
+            if (user.currentLevel > MAX_DIFFICULTY_LEVEL) {
+                saveGame(user, size);
+                cout << "You completed all levels. Game over.\n";
+                break;
+            }
+         
+        }
+        printGrid(user.currentGrid, picture, size);
+
+        int row, col;
+        cout << "\nEnter row and column (1-" << size << "): ";
+        cin >> row >> col;
+
+        if (row < 1 || row > size || col < 1 || col > size) {
+         cout << "Invalid input. Please enter valid row and column numbers.\n";
+            continue;
+        }
+
+        char guess;
+        cout << "Enter 'F' for filled or 'E' for empty: ";
+        cin >> guess;
+
+     
+        if (guess == 'q') {
+            saveGame(user, size);
+            exit(0);
+        }
+        if (guess == 'F') {
+            if (picture[row - 1][col - 1] == 'X') {
+                user.currentGrid[row - 1][col - 1] = 'X';
+            }
+            else {
+                cout << "Wrong guess!\n";
+                user.currentWrongAnswers++;
+            }
+        }
+        else if (guess == 'E') {
+            if (picture[row - 1][col - 1] == '_') {
+                user.currentGrid[row - 1][col - 1] = '_';
+            }
+            else {
+                cout << "Wrong guess!\n";
+                user.currentWrongAnswers++;
+            }
+        }
+        else {
+            cout << "Invalid input. Please enter 'F' or 'E'.\n";
+        }
+
+        for (int i = 0; i < size; ++i) {
+            bool rowComplete = true;
+            bool colComplete = true;
+
+            for (int j = 0; j < size; ++j) {
+                if (picture[i][j] == 'X' && user.currentGrid[i][j] != 'X') {
+                    rowComplete = false;
+                }
+
+                if (picture[j][i] == 'X' && user.currentGrid[j][i] != 'X') {
+                    colComplete = false;
+                }
+            }
+
+            if (rowComplete) {
+                for (int j = 0; j < size; ++j) {
+                    if (user.currentGrid[i][j] == '_') {
+                        user.currentGrid[i][j] = '-';
+                    }
+                }
+            }
+
+            if (colComplete) {
+                for (int j = 0; j < size; ++j) {
+                    if (user.currentGrid[j][i] == '_') {
+                        user.currentGrid[j][i] = '_';
+                    }
+                }
+            }
+        }
+    }
+
+    cout << "Game over! You reached the maximum number of wrong answers.\n";
+}
+
 
