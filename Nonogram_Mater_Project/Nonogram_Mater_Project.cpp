@@ -7,32 +7,34 @@ int main() {
     NonogramLevel levels[MAX_DIFFICULTY_LEVEL];
     loadLevels(levels);
 
-    std::string username;
-    std::cout << "Enter your username: ";
-    std::cin >> username;
+   string username;
+   cout << "Enter your username: ";
+   cin >> username;
 
     UserProfile user;
     user.username = username;
-
-    if (loadGame(user, MAX_SIZE)) {
-        std::cout << "Do you want to continue your last attempt? (Y/N): ";
+    user.currentLevel = 1;
+    bool newuser = true;
+    //if (loadGame(user, MAX_SIZE)) 
+    {
+       cout << "Do you want to continue your last attempt? (Y/N): ";
         char choice;
-        std::cin >> choice;
+       cin >> choice;
+        newuser = false;
 
         if (choice == 'Y' || choice == 'y') {
-            playGame(user, levels[user.currentLevel - 1]);
+            loadGame(user, MAX_SIZE);
+            playGame(user, levels[user.currentLevel - 1], newuser);
         }
         else {
             user.currentLevel = 1;
             int difficultyChoice = getDifficultyChoice();
-            playGame(user, levels[difficultyChoice - 1]);
+            playGame(user, levels[difficultyChoice - 1],newuser);
         }
     }
-    else {
+   /* else {
         user.currentLevel = 1;
         int difficultyChoice = getDifficultyChoice();
-        playGame(user, levels[difficultyChoice - 1]);
-    }
-
-    return 0;
-}
+        playGame(user, levels[difficultyChoice - 1], newuser);
+    }*/
+	}
