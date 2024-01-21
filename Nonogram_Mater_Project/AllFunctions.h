@@ -42,8 +42,8 @@ void loadLevels(NonogramLevel levels[MAX_DIFFICULTY_LEVEL]) {
         {'X', '-', '-', '-', '-'},
         {'X', '-', '-', '-', '-'},
     };
-    for (int i = 0; i < MAX_SIZE; ++i) {
-        for (int j = 0; j < MAX_SIZE; ++j) {
+    for (int i = 0; i < MAX_SIZE; i++) {
+        for (int j = 0; j < MAX_SIZE; j++) {
             int randomChoice = rand() % 2;
 
             levels[0].picture[i][j] = (randomChoice == 0) ? superEasy1[i][j] : superEasy2[i][j];
@@ -60,8 +60,8 @@ void loadLevels(NonogramLevel levels[MAX_DIFFICULTY_LEVEL]) {
         {'X', '-', 'X', '-', 'X'},
         {'X', '-', 'X', '-', 'X'},
     };
-    for (int i = 0; i < MAX_SIZE; ++i) {
-        for (int j = 0; j < MAX_SIZE; ++j) {
+    for (int i = 0; i < MAX_SIZE; i++) {
+        for (int j = 0; j < MAX_SIZE; j++) {
             levels[1].picture[i][j] = easy[i][j];
         }
     }
@@ -111,7 +111,7 @@ void saveGame(UserProfile& user, int size) {
 }
 
 bool loadGame(UserProfile& user, int size) {
-    std::ifstream file(user.username + "_save.txt");
+    ifstream file(user.username + "_save.txt");
 
     if (file.is_open()) {
         file >> user.currentLevel;
@@ -124,11 +124,65 @@ bool loadGame(UserProfile& user, int size) {
         }
 
         file.close();
-        std::cout << "Game loaded successfully.\n";
+        cout << "Game loaded successfully.\n";
         return true;
     }
     else {
-        std::cerr << "Unable to load the game.\n";
+        cout << "Unable to load the game.\n";
         return false;
     }
 }
+void printGrid(char grid[MAX_SIZE][MAX_SIZE], char picture[MAX_SIZE][MAX_SIZE], int size) {
+   cout << "\nYour Current Grid:\n";
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            cout << grid[i][j] << ' ';
+        }
+        cout << '\n';
+    }
+    cout << "\nRow Numbers and Column Numbers:\n";
+    for (int i = 0; i < size; i++) {
+        vector<int> columnNumbers;
+        int count = 0;
+        cout << i + 1 << " column ";
+        for (int j = 0; j < size; j++) {
+            if (picture[j][i] == 'X') {
+                count++;
+            }
+            else if (count > 0) {
+                columnNumbers.push_back(count);
+                count = 0;
+            }
+        }
+        if (count > 0) {
+            columnNumbers.push_back(count);
+        }
+        else {
+            columnNumbers.push_back(0);
+        }
+        for (int num : columnNumbers) {
+            cout << num << " ";
+        }
+        cout << "\n";
+    }
+    for (int i = 0; i < size; i++) {
+        int count = 0;
+        cout << i + 1 << " row ";
+        for (int j = 0; j < size; j++) {
+            if (picture[i][j] == 'X') {
+                count++;
+            }
+            else {
+                if (count > 0) {
+                    cout << count << " ";
+                    count = 0;
+                }
+            }
+        }
+        if (count > 0) {
+            cout << count << " ";
+        }
+        cout << "\n";
+    }
+}
+
