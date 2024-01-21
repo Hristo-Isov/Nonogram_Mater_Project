@@ -67,15 +67,28 @@ void loadLevels(NonogramLevel levels[MAX_DIFFICULTY_LEVEL]) {
     }
 }
 
-bool areMatricesEqual(char grid[MAX_SIZE][MAX_SIZE], char picture[MAX_SIZE][MAX_SIZE], int size) {
-    for (size_t i = 0; i < size; ++i) {
-        for (size_t j = 0; j < size; ++j) {
+int getDifficultyChoice() {
+    int choice;
+    cout << "Choose difficulty level:\n";
+    cout << "1. Super Easy\n";
+    cout << "2. Easy\n";
+    cout << "3. Medium\n";
+    cout << "4. Hard\n";
+    cout << "5. Extreme\n";
+    cout << "Enter the number corresponding to your choice: ";
+    cin >> choice;
+    return choice;
+}
+
+
+bool isLevelComplete(char grid[MAX_SIZE][MAX_SIZE], char picture[MAX_SIZE][MAX_SIZE], int size) {
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
             if (grid[i][j] != picture[i][j]) {
                 return false;
             }
         }
     }
-    cout << "Matrices are equal\n";
     return true;
 }
 void saveGame(UserProfile& user, int size) {
@@ -96,15 +109,26 @@ void saveGame(UserProfile& user, int size) {
         cerr << "Unable to save the game.\n";
     }
 }
-int getDifficultyChoice() {
-    int choice;
-    cout << "Choose difficulty level:\n";
-    cout << "1. Super Easy\n";
-    cout << "2. Easy\n";
-    cout << "3. Medium\n";
-    cout << "4. Hard\n";
-    cout << "5. Extreme\n";
-    cout << "Enter the number corresponding to your choice: ";
-    cin >> choice;
-    return choice;
+
+bool loadGame(UserProfile& user, int size) {
+    std::ifstream file(user.username + "_save.txt");
+
+    if (file.is_open()) {
+        file >> user.currentLevel;
+        file >> user.currentWrongAnswers;
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                file >> user.currentGrid[i][j];
+            }
+        }
+
+        file.close();
+        std::cout << "Game loaded successfully.\n";
+        return true;
+    }
+    else {
+        std::cerr << "Unable to load the game.\n";
+        return false;
+    }
 }
