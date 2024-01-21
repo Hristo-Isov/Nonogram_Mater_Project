@@ -23,6 +23,50 @@ struct NonogramLevel {
     char picture[MAX_SIZE][MAX_SIZE];
 };
 
+void loadLevels(NonogramLevel levels[MAX_DIFFICULTY_LEVEL]) {
+    levels[0].size = 5;
+    levels[0].maxWrongAnswers = 3;
+    char superEasy1[MAX_SIZE][MAX_SIZE] =
+    {
+        {'X', '-', 'X', '-', 'X'},
+        {'X', '-', '-', '-', '-'},
+        {'X', '-', '-', '-', '-'},
+        {'X', '-', '-', '-', '-'},
+        {'X', '-', '-', '-', '-'},
+    };
+    char superEasy2[MAX_SIZE][MAX_SIZE] =
+    {
+        {'-', '-', '-', '-', 'X'},
+        {'X', '-', '-', '-', '-'},
+        {'X', '-', '-', '-', '-'},
+        {'X', '-', '-', '-', '-'},
+        {'X', '-', '-', '-', '-'},
+    };
+    for (int i = 0; i < MAX_SIZE; ++i) {
+        for (int j = 0; j < MAX_SIZE; ++j) {
+            int randomChoice = rand() % 2;
+
+            levels[0].picture[i][j] = (randomChoice == 0) ? superEasy1[i][j] : superEasy2[i][j];
+        }
+    }
+
+    levels[1].size = 5;
+    levels[1].maxWrongAnswers = 3;
+    char easy[MAX_SIZE][MAX_SIZE] =
+    {
+        {'X', '-', 'X', '-', 'X'},
+        {'X', '-', 'X', '-', 'X'},
+        {'X', '-', 'X', '-', 'X'},
+        {'X', '-', 'X', '-', 'X'},
+        {'X', '-', 'X', '-', 'X'},
+    };
+    for (int i = 0; i < MAX_SIZE; ++i) {
+        for (int j = 0; j < MAX_SIZE; ++j) {
+            levels[1].picture[i][j] = easy[i][j];
+        }
+    }
+}
+
 bool areMatricesEqual(char grid[MAX_SIZE][MAX_SIZE], char picture[MAX_SIZE][MAX_SIZE], int size) {
     for (size_t i = 0; i < size; ++i) {
         for (size_t j = 0; j < size; ++j) {
